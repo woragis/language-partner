@@ -1,5 +1,6 @@
 import openai
-from os import getenv, _exit
+from gtts import gTTS
+from os import getenv, _exit, system
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,6 +11,16 @@ open_ai_key = getenv('OPEN_AI_KEY')
 
 def print_key():
     print(f'Open AI KEY: {open_ai_key}')
+
+
+def say():
+    text = "こんにちは、元気ですか？"
+    tts = gTTS(text=text, lang='ja')
+    file = 'jpa.mp3'
+    tts.save(file)
+    system(f'mpg123 {file}')
+
+    return
 
 
 def main():
@@ -37,4 +48,5 @@ def main():
 
 if __name__ == '__main__':
     # main()
-    print_key()
+    # print_key()
+    say()
