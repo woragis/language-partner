@@ -53,13 +53,46 @@ def main():
     print(response.choices[0].message)
 
 
-if __name__ == '__main__':
-    # main()
-    # print_key()
-    # say()
+def listen():
+    import speech_recognition as sr
+
+    # Create recognizer
+    r = sr.Recognizer()
+
+    # Use the microphone
+    with sr.Microphone() as source:
+        print("🎤 Say something...")
+        # optional: calibrate to background noise
+        r.adjust_for_ambient_noise(source)
+        r.pause_threshold = 5
+        audio = r.listen(source, timeout=10, phrase_time_limit=20)
+
+    print("⏳ Transcribing...")
+
+    try:
+        # Use Google's speech recognition
+        # "en-US" for English, "ja-JP" for Japanese
+        # text = r.recognize_google(audio, language="ja-JP")
+        text = r.recognize_google(audio, language="en-US")
+        print("📝 You said:", text)
+    except sr.UnknownValueError:
+        print("❌ Could not understand audio")
+    except sr.RequestError as e:
+        print(f"🔌 Could not request results; {e}")
+
+
+def get_files():
     file_history = []
     for i in range(5):
         file = f'{get_time()}.mp3'
         file_history.append(file)
     for i in file_history:
         print(i)
+    return file_history
+
+
+if __name__ == '__main__':
+    # main()
+    # print_key()
+    # say()
+    listen()

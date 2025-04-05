@@ -1,3 +1,5 @@
 openai
 gTTS
 python-dotenv
+SpeechRecognition
+pyaudio
