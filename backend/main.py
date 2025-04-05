@@ -2,6 +2,7 @@ import openai
 from gtts import gTTS
 from os import getenv, _exit, system
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -11,6 +12,12 @@ open_ai_key = getenv('OPEN_AI_KEY')
 
 def print_key():
     print(f'Open AI KEY: {open_ai_key}')
+
+
+def get_time() -> str:
+    now = datetime.now()
+    formated = now.strftime('%Y_%m_%d__%H_%M_%S__%f')
+    return formated
 
 
 def say():
@@ -49,4 +56,10 @@ def main():
 if __name__ == '__main__':
     # main()
     # print_key()
-    say()
+    # say()
+    file_history = []
+    for i in range(5):
+        file = f'{get_time()}.mp3'
+        file_history.append(file)
+    for i in file_history:
+        print(i)
