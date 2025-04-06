@@ -6,3 +6,4 @@ pyaudio
 grpcio
 grpcio-tools
 langchain
+langchain-google-genai
