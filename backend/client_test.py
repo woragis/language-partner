@@ -1,8 +1,17 @@
+# client.py
 import grpc
-from app import llm_pb2, llm_pb2_grpc
 
-channel = grpc.insecure_channel("localhost:50051")
-stub = llm_pb2_grpc.LLMServiceStub(channel)
+from generated import greeter_pb2
+from generated import greeter_pb2_grpc
 
-response = stub.GenerateText(llm_pb2.GenerateRequest(prompt="Tell me a joke"))
-print("🤖 LLM says:", response.response)
+
+def run():
+    with grpc.insecure_channel('localhost:50051') as channel:
+        stub = greeter_pb2_grpc.GreeterStub(channel)
+        request = greeter_pb2.HelloRequest(name='Jezreel')
+        response = stub.SayHello(request)
+        print("🧍 Client received:", response.message)
+
+
+if __name__ == '__main__':
+    run()
