@@ -12,7 +12,7 @@ def serve():
 
     # Add services to server
     greeter_pb2_grpc.add_GreeterServicer_to_server(GreeterService(), server)
-    ai_pb2_grpc.add_AIServicer_to_server(AIService, server)
+    ai_pb2_grpc.add_AIServicer_to_server(AIService(), server)
 
     # Configure Server Port
     server.add_insecure_port('[::]:50051')
