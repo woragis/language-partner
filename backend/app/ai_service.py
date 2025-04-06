@@ -1,11 +1,19 @@
 from generated import ai_pb2, ai_pb2_grpc
+from agents.multi_llm_agent import build_agent
 
-# This would normally be replaced with a real AI backend call
-def dummy_ai_response(prompt: str) -> str:
-    return f"🤖 Echo: {prompt}"
 
 class AIService(ai_pb2_grpc.AIServicer):
+
+    def __init__(self):
+        print("🚀 Initializing multi-LLM agent...")
+        self.agent = build_agent()
+
     def Chat(self, request, context):
         print(f"📩 Received prompt: {request.prompt}")
-        response_text = dummy_ai_response(request.prompt)
+
+        try:
+            response_text = self.agent.run(request.prompt)
+        except Exception as e:
+            response_text = f"❌ Error processing request: {e}"
+
         return ai_pb2.ChatResponse(response=response_text)
