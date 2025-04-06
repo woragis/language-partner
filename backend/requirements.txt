@@ -5,3 +5,4 @@ SpeechRecognition
 pyaudio
 grpcio
 grpcio-tools
+langchain
