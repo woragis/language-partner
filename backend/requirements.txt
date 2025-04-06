@@ -3,3 +3,5 @@ gTTS
 python-dotenv
 SpeechRecognition
 pyaudio
+grpcio
+grpcio-tools
