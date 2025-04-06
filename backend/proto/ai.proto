@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package ai;
+
+// AI chat service definition
+service AI {
+  // Sends a user message and receives a response from the AI
+  rpc Chat (ChatRequest) returns (ChatResponse);
+}
+
+// The request message containing the user's input
+message ChatRequest {
+  string prompt = 1;  // e.g., "What's the weather like?"
+}
+
+// The response message containing the AI's reply
+message ChatResponse {
+  string response = 1;  // e.g., "It's sunny and 25°C."
+}
