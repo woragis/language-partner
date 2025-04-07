@@ -3,6 +3,7 @@ from gtts import gTTS
 from os import getenv, _exit, system
 from dotenv import load_dotenv
 from datetime import datetime
+import pyaudio
 
 load_dotenv()
 
@@ -81,6 +82,89 @@ def listen():
         print(f"🔌 Could not request results; {e}")
 
 
+def record_audio():
+    import pyaudio
+    import wave
+    import time
+
+    CHUNK = 1024
+    FORMAT = pyaudio.paInt16  # Change to 16-bit integer for WAV compatibility
+    CHANNELS = 1
+    RATE = 44100
+    RECORD_SECONDS = 15  # Record for 5 seconds
+
+    p = pyaudio.PyAudio()
+
+    stream = p.open(format=FORMAT,
+                    channels=CHANNELS,
+                    rate=RATE,
+                    input=True,
+                    frames_per_buffer=CHUNK)
+
+    print("Recording...")
+
+    frames = []
+
+    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+        data = stream.read(CHUNK)
+        frames.append(data)
+
+    print("Finished recording.")
+
+    # Stop and close the stream
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
+    # Save to WAV file
+    wf = wave.open("output.mp3", 'wb')
+    wf.setnchannels(CHANNELS)
+    wf.setsampwidth(p.get_sample_size(FORMAT))
+    wf.setframerate(RATE)
+    wf.writeframes(b''.join(frames))
+    wf.close()
+
+    print("Audio saved as output.mp3")
+
+
+def playback_audio():
+    p = pyaudio.PyAudio()
+    FORMAT = pyaudio.paFloat32
+    CHANNELS = 1
+    RATE = 44100
+    CHUNK = 1024
+    input_stream = p.open(format=FORMAT, channels=CHANNELS,
+                          input=True, rate=RATE, frames_per_buffer=CHUNK)
+    output_stream = p.open(format=FORMAT, channels=CHANNELS,
+                           output=True, rate=RATE, frames_per_buffer=CHUNK)
+    print('listening to your microfone and playing back... press ctrl+c to stop')
+    try:
+        while True:
+            data = input_stream.read(CHUNK)
+            output_stream.write(data)
+    except KeyboardInterrupt:
+        print('stopping...')
+    finally:
+        input_stream.stop_stream()
+        input_stream.close()
+        output_stream.stop_stream()
+        output_stream.close()
+        p.terminate()
+
+
+def whisper_audio_transcribe():
+    import whisper
+
+    model = whisper.load_model('small')  # or 'base', 'medium', 'large', etc.
+
+    result = model.transcribe('output.mp3')
+
+    print('Detected language:', result['language'])
+    print('Transcription:', result['text'])
+
+    return
+
+
 def get_files():
     file_history = []
     for i in range(5):
@@ -95,4 +179,7 @@ if __name__ == '__main__':
     # main()
     # print_key()
     # say()
-    listen()
+    # listen()
+    # playback_audio()
+    # record_audio()
+    whisper_audio_transcribe()
