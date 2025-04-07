@@ -12,14 +12,18 @@ def test_greeter(channel: Channel) -> str:
 
 
 def test_ai_search(channel: Channel) -> str:
+    stub = ai_pb2_grpc.AiStub(channel)
+    prompt = ''
+    request = ai_pb2.ChatRequest(prompt=prompt)
+    response = stub.Chat(request)
     return
 
 
 def test_ai_talk(channel: Channel) -> str:
     stub = ai_pb2_grpc.AIStub(channel)
     prompt = 'Hello, my name is jezreel'
-    chat_request = ai_pb2.ChatRequest(prompt=prompt)
-    response = stub.Chat(chat_request)
+    request = ai_pb2.ChatRequest(prompt=prompt)
+    response = stub.Chat(request)
     return response
 
 
